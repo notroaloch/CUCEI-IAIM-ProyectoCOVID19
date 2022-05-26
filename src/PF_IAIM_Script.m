@@ -18,8 +18,11 @@ disp(strcat("ARCHIVO CARGADO: ", filePath));
 
 disp("INICIANDO - SEGMENTACIÓN DE PULMONES");
 
-lungs.Image = segmentLungs(CT);
+% lungs.Image = segmentLungs(CT);
 % lungs.Image = segmentLungsV2(CT); % 57% más rápido pero tiene traquea
+lungs.Image = segmentLungsV3(CT);
+
+volumeViewer(lungs.Image);
 
 disp("TERMINADO - SEGMENTACIÓN DE PULMONES");
 
@@ -32,9 +35,9 @@ damage2.Image = lungs.Image < -100 & lungs.Image > -500;
 damage3.Image = lungs.Image < -977 & lungs.Image > -1024;
 
 damage4.Image = lungs.Image < -470 & lungs.Image > -730;
-damage4Props = regionprops3(damage4.Image, "Volume");
-damage4Volumes = sort(damage4Props.Volume, 'descend');
-damage4.Image = bwareaopen(damage4.Image, damage4Volumes(2, 1));
+% damage4Props = regionprops3(damage4.Image, "Volume");
+% damage4Volumes = sort(damage4Props.Volume, 'descend');
+% damage4.Image = bwareaopen(damage4.Image, damage4Volumes(2, 1));
 
 
 disp("TERMINADO - SEGMENTACIÓN DE DAÑO");
@@ -77,5 +80,3 @@ volshow(damage3.Image);
 
 figure("Name", "Daño Tipo 4");
 volshow(damage4.Image);
-
-imageLung = imcomplement(lungs.Image);
